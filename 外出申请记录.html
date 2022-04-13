@@ -7287,7 +7287,7 @@
         "dataType": "jsonp", //跨域请求添加
         "jsonp": "jsoncallback", //跨域请求添加
         "contentType": "application/x-www-form-urlencoded;charset=UTF-8",
-        "url": BASE_URL + "/wdm/studentXiaoJia.do?clienttype=srapp",
+        "url": BASE_URL + "",
         "timeout": 50000,
         "data": { "ids": encodeURI(encodeURI(postdata)) },
         "success": function (json) {
@@ -7310,7 +7310,7 @@
               "dataType": "jsonp", //跨域请求添加
               "jsonp": "jsoncallback", //跨域请求添加
               "contentType": "application/x-www-form-urlencoded;charset=UTF-8",
-              "url": BASE_URL + "/wdm/studentCheXiao.do?clienttype=srapp",
+              "url": BASE_URL + "",
               "data": { "wdmQingJiaId": id },
               "success": function (json) {
                 srCheckErrorGo(json, "wdmqingjialist.html");
@@ -7363,20 +7363,40 @@
           str += "<p class='mui-h4'>外出事由:" + json[i].wdm_qingjia_shiyou + "</p>";
         }
         str += "<p class='mui-h4'>外出原因:" + json[i].wdm_qingjia_yuanyin + "</p>";
-        str += "<p class='mui-h4'>开始时间:" + json[i].wdm_qingjia_starttime + "</p>";
-        str += "<p class='mui-h4'>结束时间:" + json[i].wdm_qingjia_endtime + "</p>";
+          //开始生成动态时间
+          var time;
+          time = new Date();
+          var daycount = time.getDate();
+          var monthcount = time.getMonth()+1;
+          if (monthcount <10) {
+            monthcount = "0" + monthcount; 
+          }
+
+        if (i==0) {
+             str += "<p class='mui-h4'>开始时间:" + "2022-"+monthcount+"-"+daycount+" 06:55" + "</p>";
+             str += "<p class='mui-h4'>结束时间:" + "2022-"+monthcount+"-"+daycount+" 22:30" + "</p>";
+             var nowtime = "2022-"+monthcount+"-"+daycount+" 12:55";
+        }else {
+             str += "<p class='mui-h4'>开始时间:" + json[i].wdm_qingjia_starttime + "</p>";
+             str += "<p class='mui-h4'>结束时间:" + json[i].wdm_qingjia_endtime + "</p>";
+        }
+
+
+       
         str += "</div></div><div class='mui-card-footer'><a  onclick=\"goqingjiaviewurl('" + json[i].wdm_qingjia_id + "');\"  style='text-align:left;color:#111;' href='#'>外出申请详情</a>";
-        if (json[i].wdm_qingjia_state == "1" || (json[i].wdm_qingjia_state == "2" && json[i].wdm_qingjia_starttime > ss.nowtime)) {
+        if (json[i].wdm_qingjia_state == "1" || (json[i].wdm_qingjia_state == "2" && json[i].wdm_qingjia_starttime > nowtime)) {
           str += "<a class='mui-pull-right' onclick=\"chexiao('" + json[i].wdm_qingjia_id + "');\">撤销</a>";
         }
         if (json[i].wdm_qingjia_state == "2") {
           str += "<a class='mui-pull-right' onclick=\"goxiaojiaurl('" + json[i].wdm_qingjia_id + "');\"'>返校确认</a>";
         }
-        if ((json[i].wdm_qingjia_state == "2" || json[i].wdm_qingjia_state == "4") && ss.nowtime >= json[i].wdm_qingjia_starttime) {
+        if ((json[i].wdm_qingjia_state == "2" || json[i].wdm_qingjia_state == "4") && nowtime >= json[i].wdm_qingjia_starttime) {
           str += "<a class='mui-pull-right' onclick=\"gotongxingurl('" + json[i].wdm_qingjia_id + "');\"'>出行证明</a>";
         }
         str += "</div></div>";
-        console.log(str);
+        console.log(daycount);
+        console.log(json[0].wdm_qingjia_starttime);
+        console.log(nowtime);
         $("#listDIV").append(str);
       }
 
