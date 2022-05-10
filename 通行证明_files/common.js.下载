@@ -26,7 +26,7 @@ function srToastInit(){
     document.body.appendChild(srloading);
 }
 function srToastShow(){
-    $("#srloading").show();
+    $("#srloading").hide();
 }
 function srToastHide(){
     $("#srloading").hide();
@@ -34,7 +34,7 @@ function srToastHide(){
 
 function srToastTxt(txt,timeout) {
     if($("#srloading").is(":hidden")){
-        $("#srloading").show();
+        $("#srloading").hide();
     }
     if(srisEmpty(txt)) {
         txt = "登陆超时，请关闭后重新打开";
@@ -51,7 +51,7 @@ function srToastTxt(txt,timeout) {
 
 function checkLogin() {
     var loginflag = false;
-    srToastShow();
+    srToastHide();
     $.ajax(BASE_URL + "/srappverify.do?clienttype=srapp&id=yiban", {
         contentType: "application/x-www-form-urlencoded;charset=UTF-8",
         async: "false",
